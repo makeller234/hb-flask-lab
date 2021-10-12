@@ -17,13 +17,14 @@ AWESOMENESS = [
 @app.route('/')
 def start_here():
     """Home page."""
-
-    return "<!doctype html><html>Hi! This is the home page.</html>"
+    
+    return "<!doctype html><html>Hi! This is the home page.<a href='/hello'>Go To Hello Because We Can!</a></html>"
 
 
 @app.route('/hello')
 def say_hello():
     """Say hello and prompt for user's name."""
+ 
 
     return """
     <!doctype html>
@@ -34,13 +35,46 @@ def say_hello():
       <body>
         <h1>Hi There!</h1>
         <form action="/greet">
-          What's your name? <input type="text" name="person">
+          What's your name? <input type="text" name="person"> <br>
+          Pick how you're feeling today?
+          <input type="radio" name ="feeling" value="Sad">
+          <label> Sad </label>
+          <input type="radio" name ="feeling" value="Happy">
+          <label> Happy </label> <br>
+          <input type="submit" value="Submit">
+        </form>
+        <form action="/diss">
+          What's your name? <input type="text" name="person"> <br>
+          Pick how you want to be insulted:
+          <input type="radio" name ="insult" value="You suck">
+          <label> Surprise #1 </label>
+          <input type="radio" name ="insult" value="You really suck">
+          <label> Surprise #2 </label> <br>
           <input type="submit" value="Submit">
         </form>
       </body>
     </html>
     """
 
+@app.route('/diss')
+def diss_person():
+    """Get user by name."""
+
+    player = request.args.get("person")
+
+    insult = request.args.get("insult")
+ 
+    return f"""
+    <!doctype html>
+    <html>
+      <head>
+        <title>An Insult!</title>
+      </head>
+      <body>
+        Hi, {player}! I think you're {insult}!
+      </body>
+    </html>
+    """
 
 @app.route('/greet')
 def greet_person():
@@ -48,8 +82,8 @@ def greet_person():
 
     player = request.args.get("person")
 
-    compliment = choice(AWESOMENESS)
-
+    compliment = request.args.get("feeling")
+ 
     return f"""
     <!doctype html>
     <html>
